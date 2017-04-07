@@ -1,0 +1,106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>
+  body {
+    padding: 100px;
+    width: 1000px;
+    margin: auto;
+    text-align: left;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    color: #121212;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+</style>
+<title>CS 184 Ray Tracer, Part 1</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
+</head>
+
+<body>
+
+<h1 align="middle">CS 184: Final Proposal</h1>
+
+<br>
+
+<div>
+
+    <p><b>Project Title</b>: Displacement Maps using Dynamic Tessellation</p>
+
+    <p><b>Team Members</b>: Jeff Yu (cs184-ady), Bing Bo (cs184-afd)</p>
+
+    <p><b>Goal</b>: implement <b>Tessellation</b> and <b>Displacement Mapping</b> in order to add stunning surface details</p>
+
+    <h2 align="middle">Problem Description</h2>
+
+    <p>The implementation in our final project would be separated into two parts: <b>Tessellation</b> and <b>Displacement Mapping</b>.</p>
+
+    <p style="margin-left: 2.5em"><b>Tessellation</b>:</p>
+    <p style="margin-left: 4.5em"> In Project 2, we have already implemented the Loop Subdivision. However, the issue arose from that is we might subdivide those meshes that do not need to be subdivided. For instance, if certain parts of surfaces have already been smooth enough, keeping subdividing the meshes beneath these parts would only be redundant and slowing our rendering. Therefore, we find the number of subdivisions that is needed for each meshes, which would be our biggest difficulty in this part.</p>
+    <p style="margin-left:  4.5em">We decide to solve it by implementing <b>PN-Triangles</b> to achieve Tessellation. If we followed the method in <i>[1]</i>, we would have to change our meshes from triangle to quad and implement Catmull-Clark Subdivision. Moreover, as suggested in <i>[2]</i>, <b>PN-Triangles</b> method out-performs <b>Walton-Meek Triangles</b> and <b>Gregory Triangles</b> under all situations.</p>
+    <p style="margin-left: 2.5em"><b>Displacement Mapping</b>:</p>
+    <p style="margin-left: 4.5em">Tessellation is implemented to achieve high performance efficiency-wise, but <b>Displacement Mapping</b> is the key thing that decorates our object with those "stunning surface details". Differing from a texture map, a displacement map contains a scalar value per texel that tells us how much the surface should be displaced to in the direction of its normal. In order to achieve <b>Displacement Mapping</b>, we need to add geometry and modify our <b>Normal Shading</b> by increasing the geometric details.</p>
+
+<h2 align="middle">Goal</h2>
+<p><b>What we plan to deliver</b>: Firstly, we finish tessellation in final project. In project 2, we implement fixed loop
+    subdivision for each mesh. But some mesh that are close to the view point or their surface is curve need more times subdivision to produce a smooth surface,
+    meanwhile, the meshes that are far away from view point and have low curvature do not need to do to many times subdivision relatively.
+    Thus, in order to avoid under-subdivision or over-subdivision and make our algorithm more efficient, we need to accomplish
+    tessellation and it is our first goal in final project. After reading article <i>[1]</i>, we think we can also use flatness test in triangle meshes to implement tessellation, combining the method suggested in <i>[2]</i>. After finishing it, we should
+    get two image as below, the left is subdivision effect with tessellation, and the right image is the regular subdivision without tessellation.
+    As shown in the images, it is obvious the the curve and close surface experienced more subdivisions for the left image.
+</p>
+    <div align="middle">
+        <table style="width=100%">
+            <tr>
+                <td>
+                    <img src="images/T.png" align="middle" width="600px"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+<p>Next, we need to finish the displacement mapping that is used to add geometric complexity to a simple, lightweight model. Displacement
+    maps really change the actual geometry of the surface, and each texel has a unique scalar value. And in the implementation,
+    we need to compare the the maximum displacement and the flatness threshold and add more geometry if the edge's maximum displacement
+    is greater than the flatness threshold. We implement flatness test during tessellation, thus we are able to accomplish it. What's more,
+    we need to use normal mapping to take the displacement into account when shading the surface instead of adjusting the vertex normals like bump mapping.
+    Below is a monster frog before and after implement displacement mapping, this is what we expect to get after implementation.
+</p>
+    <div align="middle">
+        <table style="width=100%">
+            <tr>
+                <td>
+                    <img src="images/D.png" align="middle" width="400px"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+<p><b>What we hope to deliver</b>: If everything goes well, we hope to accomplish the the tessellation with a quad-based subdivision scheme, Catmull-Clark Subdivision.
+Thus we need to change the geometry that are based on the four sides polygons instead of triangles, and we hope to find any difference between the monster frog with different
+subdivision scheme after doing diaplacement mapping on it.</p>
+    <div align="middle">
+        <table style="width=100%">
+            <tr>
+                <td>
+                    <img src="images/plan%20to%20get.png" align="middle" width="600px"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+<h2 align="middle">Schedule</h2>
+<p>First week, we should complete implementing tessellation. </p>
+<p>Second week, we should finish the displacement mapping and see the monster frog with details, and the meshes is triangle.</p>
+<p>Third week, if everything goes well, we will try to implement Catmull-Clark Subdivision. Otherwise, we will try to debug the works in previous two weeks.</p>
+<p>Last week, we will prepare the presentation and other materials for final deliverables.</p>
+
+<h2 align="middle">Resource</h2>
+<p><i>[1]</i> http://http.developer.nvidia.com/GPUGems2/gpugems2_chapter07.html</p>
+<p><i>[2]</i> https://interactive.asu.edu/wp-content/papercite-data/pdf/amresh2012methods.pdf</p>
+</div>
+</body>
+</html>
