@@ -1,0 +1,123 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<style>
+  body {
+    padding: 100px;
+    width: 1000px;
+    margin: auto;
+    text-align: left;
+    font-weight: 300;
+    font-family: 'Open Sans', sans-serif;
+    color: #121212;
+  }
+  h1, h2, h3, h4 {
+    font-family: 'Source Sans Pro', sans-serif;
+  }
+</style>
+<title>CS 184 Ray Tracer, Part 1</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link href="https://fonts.googleapis.com/css?family=Open+Sans|Source+Sans+Pro" rel="stylesheet">
+</head>
+
+<body>
+
+<h1 align="middle">CS 184: Final Proposal</h1>
+
+<br>
+
+<div>
+
+    <p><b>Project Title</b>: Displacement Maps using Dynamic Tessellation</p>
+
+    <p><b>Team Members</b>: Jeff Yu (cs184-ady), Bing Bo (cs184-afd)</p>
+
+    <p><b>Goal</b>: implement <b>Tessellation</b> and <b>Displacement Mapping</b> in order to add stunning surface details</p>
+
+    <h2 align="middle">Problem Description</h2>
+
+    <p>The implementation in our final project would be separated into two parts: <b>Tessellation</b> and <b>Displacement Mapping</b>.</p>
+
+    <p style="margin-left: 2.5em"><b>Tessellation</b>:</p>
+    <p style="margin-left: 4.5em"> In Project 2, we have already implemented the subdivision algorithm. However, the issue arose from that is we might subdivide those meshes that do not need to be subdivided. For instance, if certain parts of surfaces have already been smooth enough, keeping subdividing the meshes beneath these parts would only be redundant and slowing our rendering. Therefore, we find the number of subdivisions that is needed for each meshes, which would be our biggest difficulty in this part.</p>
+    <p style="margin-left:  4.5em">More specifically, we should convert our mesh topology from triangles to quad in order to follow the instructions from <i>[1]</i>. Therefore, we would need to implement <b>Catmull-Clark Subdivision</b> according to certain vertex update rules. Moreover, <b>Adaptive Subdivision</b> can be built based on the surface curvature and the viewpoint to avoid the inefficiency and the artifacts caused by over-tessellated and under-tessellated parts.</p>
+    <p style="margin-left: 2.5em"><b>Displacement Mapping</b>:</p>
+    <p style="margin-left: 4.5em">Tessellation is implemented to achieve high performance efficiency-wise, and <b>Displacement Mapping</b> is the key thing that decorates our object with those "stunning surface details". Differing from a texture map, a displacement map contains a scalar value per texel that tells us how much the surface should be displaced to in the direction of its normal. In order to achieve <b>Displacement Mapping</b>, we need to add geometries based on the comparison between each edge's maximum displacement given in the displacement map and the corresponding flatness, and modify our <b>Normal Shading</b> by increasing the geometric details. Note that flatness is defined as the distance from the mesh to the hypothetical surface that the mesh approaches to after an infinite number of subdivision.</p>
+
+<h2 align="middle">Goal</h2>
+<p style="margin-left: 2.5em"><b>What we plan to deliver</b>: </p>
+<p style="margin-left: 4.5em">Firstly, we would need to convert our polygonal meshes from triangles to Quad and implement <b>Catmull-Clark Subdivision</b>. More details about the Vertex Update Rules can be found at <a href="https://cs184.org/lecture/geometry-processing/slide_018">in the class slides</a>.
+</p>
+    <div align="middle">
+        <table style="width=100%">
+            <tr>
+                <td>
+                    <img src="images/Quad_Catmull-Clark.jpg" align="middle" width="600px"/>
+                    <figcaption align="middle">Catmull-Clark Subdivision on Cube</figcaption>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <p style="margin-left: 4.5em">Then, we are to implement <b>Adaptive Tessellation</b>. The number of subdivision to be applied on certain mesh is based on how close it is to the viewpoint and how curve its surface is. The figure below illustrates well how the number of subdivision is selected based on the mesh's viewpoint and curvature.</p>
+    <div align="middle">
+        <table style="width=100%">
+            <tr>
+                <td>
+                    <img src="images/T2.jpg" align="middle" width="300px" height="400px"/>
+                    <figcaption align="middle">Adaptive Tessellation</figcaption>
+                </td>
+            </tr>
+        </table>
+    </div>
+<p style="margin-left: 4.5em">Lastly, we need to finish the <b>Displacement Mapping</b> that is used to add geometric complexity to a simple, lightweight model. Displacement
+    maps really change the actual geometry of the surface. We need to compare the the maximum displacement and the flatness threshold and add more geometry if the edge's maximum displacement
+    is greater than the flatness threshold. Moreover, we use normal mapping to take the displacement into account when shading the surface instead of adjusting the vertex normals like bump mapping.
+    Below is a monster frog after implementing displacement mapping, this is what we expect to get after implementation.
+</p>
+    <div align="middle">
+        <table style="width=100%">
+            <tr>
+                <td>
+                    <img src="images/D.png" align="middle" width="400px"/>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+<p style="margin-left: 2.5em"><b>What we hope to deliver</b>:</p> 
+<p style="margin-left: 4.5cm">If everything goes well, we hope to accomplish the the tessellation with a triangle-based subdivision scheme, Loop Subdivision.
+We decide to solve it by implementing <b>PN-Triangles</b> to achieve Tessellation. As suggested in <i>[2]</i>, <b>PN-Triangles</b> method out-performs <b>Walton-Meek Triangles</b> and <b>Gregory Triangles</b> under all situations. We would like to figure out the differences between implementing tessellation with Catmull-Clark Subdivision and Loop Subdivision.</p>
+
+
+<h2 align="middle">Schedule</h2>
+
+<table border="1" align="center">
+<tr>
+<td>Week 1</td>
+<td>Catmull-Clark Subdivision</td>
+</tr>
+<tr>
+<td>Week 2</td>
+<td>Tessellation</td>
+</tr>
+<tr>
+<td>Week 3</td>
+<td>Displacement Mapping</td>
+</tr>
+<tr>
+<td>Week 4</td>
+<td>Prepare for presentation and final write-up</td>
+</tr>
+</table>
+
+<h2 align="middle">Resources</h2>
+<p><i>[1]</i> <a href="http://http.developer.nvidia.com/GPUGems2/gpugems2_chapter07.html">Chapter 7. Adaptive Tessellation of Subdivision Surfaces with Displacement Mapping</a></p>
+<p><i>[2]</i> <a href="https://interactive.asu.edu/wp-content/papercite-data/pdf/amresh2012methods.pdf">Methods for Approximating
+Loop Subdivision Using
+Tessellation Enabled GPUs</a></p>
+<p><i>[3]</i><a href="http://faculty.cs.tamu.edu/schaefer/research/exactEval_cagd.pdf">Exact Evaluation of Limits and Tangents for
+Non-Polynomial Subdivision Schemes</a></p>
+</div>
+</body>
+</html>
